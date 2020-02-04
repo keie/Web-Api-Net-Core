@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ApiRepositories\ApiRepositories.csproj" />
+    <ProjectReference Include="..\ApiUnitWork\ApiUnitWork.csproj" />
   </ItemGroup>
 
   <ItemGroup>
