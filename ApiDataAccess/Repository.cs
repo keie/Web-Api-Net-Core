@@ -14,7 +14,7 @@ namespace ApiDataAccess
         public Repository(string _connectionString)
         {
             SqlMapperExtensions.TableNameMapper = (type) => { return $"{type.Name }"; };
-            _connectionString = _connectionString;
+            this._connectionString = _connectionString;
         }
         public bool Delete(T entity)
         {
