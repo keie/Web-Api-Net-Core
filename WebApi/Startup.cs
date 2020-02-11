@@ -4,11 +4,16 @@ namespace WebApi
 {
     using ApiDataAccess;
     using ApiUnitWork;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.IdentityModel.Logging;
+    using WebApi.Authentication;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -24,6 +29,19 @@ namespace WebApi
             services.AddSingleton<IUnitOfWork>(option => new UnitOfWork(
                 Configuration.GetConnectionString("local")
                 ));
+            var tokenProvider = new JwtProvider("issuer", "audience", "northwind_20000");
+            services.AddSingleton<ITokenProvider>(tokenProvider);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options=> {
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = tokenProvider.GetValidationParameters();
+                });
+            services.AddAuthorization(auth=> {
+                auth.DefaultPolicy = new AuthorizationPolicyBuilder()
+                .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build();
+            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -33,6 +51,7 @@ namespace WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                IdentityModelEventSource.ShowPII = true;
             }
             else
             {
@@ -41,6 +60,7 @@ namespace WebApi
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

@@ -7,7 +7,7 @@ namespace ApiModels
     using System.Text;
     public class Supplier
     {
-        public int Int { get; set; }
+        public int Id { get; set; }
         public string CompanyName { get; set; }
         public string ContactName { get; set; }
         public string ContactTitle { get; set; }
