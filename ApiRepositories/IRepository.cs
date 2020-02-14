@@ -1,9 +1,10 @@
 ﻿
 
-using System.Collections.Generic;
+
 
 namespace ApiRepositories
 {
+    using System.Collections.Generic;
     public interface IRepository<T> where T:class
     {
         bool Delete(T entity);

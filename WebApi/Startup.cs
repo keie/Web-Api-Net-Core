@@ -13,6 +13,7 @@ namespace WebApi
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Logging;
     using WebApi.Authentication;
+    using WebApi.GlobalErrorHandling;
 
     public class Startup
     {
@@ -61,6 +62,7 @@ namespace WebApi
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
+            app.ConfigureExceptionHandler();
             app.UseMvc();
         }
     }

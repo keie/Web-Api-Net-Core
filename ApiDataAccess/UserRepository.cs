@@ -5,6 +5,7 @@ namespace ApiDataAccess
     using ApiModels;
     using ApiRepositories;
     using Dapper;
+    using System;
     using System.Data.SqlClient;
     public class UserRepository : Repository<User>, IUserRepository
     {
@@ -16,6 +17,7 @@ namespace ApiDataAccess
 
         public User ValidateUser(string email, string password)
         {
+            
             var parameters = new DynamicParameters();
             parameters.Add("@email", email);
             parameters.Add("@password", password);
